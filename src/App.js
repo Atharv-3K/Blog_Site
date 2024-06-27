@@ -8,6 +8,7 @@ import { CssBaseline, Container, Typography, AppBar, Toolbar, Button} from '@mui
 import Dashboard from './Dashboard';
 import CreateBlog from './createBlog';
 import Blogs from './Your_blogs';
+import Blog from './Blog'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create" element={<CreateBlog/>} />
         <Route path="/Your_blogs" element={<Blogs/>} />
+        <Route path="/blog/:id" element={<Blog/>}/>
       </Routes>
       {/* </Container> */}
     </Router>

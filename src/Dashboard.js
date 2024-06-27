@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { getBlogs } from './blogService';
-import Blog from './Blog';
-import { CssBaseline, Container, Typography, AppBar, Toolbar, Button} from '@mui/material';
+import { CssBaseline, Container, Typography, AppBar, Toolbar, Button, Grid, Card, CardContent, CardActions } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -43,11 +43,9 @@ const Dashboard = () => {
 
   return (
     <>
-    <CssBaseline />
-    <AppBar position="static">
+      <CssBaseline />
+      <AppBar position="static">
         <Toolbar>
-          {/* <Typography variant="h6" style={{ flexGrow: 1 }}>Blog Dashboard</Typography> */}
-          {/* <Button color="inherit" component={Link} to="/">Home</Button> */}
           <Button color="inherit" component={Link} to="/login">Log Out</Button>
           <Button color="inherit" component={Link} to="/create">Create Blog</Button>
           <Button color="inherit" component={Link} to="/Your_blogs">Your Blogs</Button>
@@ -57,13 +55,30 @@ const Dashboard = () => {
         <Typography variant="h2" align="center" gutterBottom>
           Blog Dashboard
         </Typography>
-        {/* <Dashboard /> */}
+        <Grid container spacing={4}>
+          {blogs.map((blog) => (
+            <Grid item key={blog._id} xs={12} sm={6} md={6}>
+              <Card onClick={() => navigate(`/blog/${blog._id}`)} style={{ cursor: 'pointer' }}>
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    {blog.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}
+                  />
+                </CardContent>
+                <CardActions>
+                  <Button size="small" color="primary" onClick={() => navigate(`/blog/${blog._id}`)}>
+                    Read More
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
-    <Container style={{ marginTop: '50px' }}>
-      {blogs.map(blog => (
-        <Blog key={blog.id} title={blog.title} content={blog.content} author={blog.username} />
-      ))}
-    </Container>
     </>
   );
 };

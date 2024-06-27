@@ -8,19 +8,24 @@ import axios from 'axios';
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const data = await getYourBlogs();
-        setBlogs(data);
-      } catch (err) {
-        setError(err.message);
+        const response = await axios.get('http://localhost:5000/Your_blogs',{withCredentials: true});
+        console.log(response.data);
+        setBlogs(response.data);
+        // setLoading(false);
+        // return response.data;
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        throw error;
+    
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 
@@ -30,7 +35,7 @@ const Blogs = () => {
   const handleDelete = async (event, id) => {
     event.preventDefault();
     setError(null);
-    setLoading(true);
+    // setLoading(true);
 
     try {
       await axios.post('http://localhost:5000/delete', { id }, { withCredentials: true });
@@ -38,22 +43,22 @@ const Blogs = () => {
       // Update the state after successful deletion
       setBlogs(prevBlogs => prevBlogs.filter(blog => blog._id !== id));
 
-      setLoading(false); // Uncomment if you want to stop the loading state after deletion
+      // setLoading(false); // Uncomment if you want to stop the loading state after deletion
       // You can add a success message or do other UI updates as needed
 
     } catch (err) {
       setError('Failed to delete blog');
-      setLoading(false); // Handle error and stop loading state
+      // setLoading(false); // Handle error and stop loading state
     }
   };
 
-  if (loading) {
-    return (
-      <Container style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-        <CircularProgress />
-      </Container>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Container style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+  //       <CircularProgress />
+  //     </Container>
+  //   );
+  // }
 
   if (error) {
     return (

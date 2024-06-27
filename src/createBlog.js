@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Box, CircularProgress } from '@mui/material';
+import { Container, TextField, Typography, Button,Box, CircularProgress } from '@mui/material';
 import { AppBar, Toolbar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+// import Button from './button';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
@@ -70,7 +71,7 @@ const CreateBlog = () => {
   };
 
   return (
-    <>
+    <div className='bg-black min-h-screen overflow-hide'>
       <AppBar position="static" style={{ backgroundColor: '#1a237e', marginBottom: '20px' }}>
         <Toolbar>
           <Button color="inherit" component={Link} to="/dashboard" style={{ marginRight: '10px' }}>Dashboard</Button>
@@ -102,24 +103,27 @@ const CreateBlog = () => {
               theme="snow"
               value={content}
               onChange={setContent}
-              style={{ height: '350px', backgroundColor: 'white', color: 'black', borderRadius: '5px', padding: '10px' }}
+              style={{ height: '350px', backgroundColor: 'white', color: 'black', borderRadius: '5px' }}
+              className='w-full p-2 mb-6 rounded bg-white text-black h-60vh overflow-scroll'
             />
           </Box>
           <Box mb={2} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button type="submit" variant="contained" color="primary"
-              style={{ height: '40px', background: 'linear-gradient(to right, #0f4c75, #3282b8)', color: 'white', width: '45%', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', padding: '10px' }}>
+            <button type="submit" variant="contained" color="primary"
+              // style={{ height: '40px', background: 'linear-gradient(to right, #0f4c75, #3282b8)', color: 'white', width: '45%', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', padding: '10px' }}
+              className='bg-gradient-to-r from-blue-700 to-purple-700 text-white font-bold py-2 px-4 rounded hover:from-blue-800 hover:to-purple-800 transition-all duration-500 shadow-lg w-1/3'
+              >
               Create Blog
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={generateBlogContent}
               variant="contained"
               color="secondary"
               disabled={loading}
-              style={{ height: '40px', color: 'white', width: '45%', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', padding: '10px' }}
-              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 px-4 rounded hover:from-blue-600 hover:to-purple-600 transition-all duration-500 shadow-lg"
+              // style={{ height: '40px', color: 'white', width: '45%', borderRadius: '5px', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', padding: '10px' }}
+              className="bg-gradient-to-r from-blue-700 to-purple-700 text-white font-bold py-2 px-4 rounded hover:from-blue-800 hover:to-purple-800 transition-all duration-500 shadow-lg w-1/3"
             >
               {loading ? <CircularProgress size={24} style={{ color: 'white' }} /> : 'Generate Content'}
-            </Button>
+            </button>
           </Box>
         </form>
         {error && (
@@ -129,7 +133,7 @@ const CreateBlog = () => {
           <Typography variant="body1" style={{ color: '#4caf50', marginBottom: '10px' }}>Blog created successfully!</Typography>
         )}
       </Container>
-    </>
+    </div>
   );
 };
 

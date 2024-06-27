@@ -155,7 +155,7 @@ app.get('/Your_blogs',verifyUser,async (req,res)=>{
   try{
     // console.log(req.user);
   const blogs = await Blog.find({email:req.user.email});
-  // console.log(blogs);
+  console.log('your blogs',blogs);
   if(!blogs)res.json([]);
   res.json(blogs);
   }catch(e){
@@ -163,6 +163,20 @@ app.get('/Your_blogs',verifyUser,async (req,res)=>{
   
   }
 });
+
+app.get('/blog/:id',async (req,res)=>{
+  try{
+    const blog = await Blog.findById(req.params.id);
+    console.log(blog);
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+    res.json(blog);
+  } catch (err) {
+    // console.log(req.params.id);
+    res.status(500).json({ message: err.message });
+  }
+})
 
 app.post('/delete',verifyUser,async (req,res)=>{
   try{

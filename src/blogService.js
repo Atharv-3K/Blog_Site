@@ -14,9 +14,20 @@ export const getBlogs = async () => {
 export const getYourBlogs = async () => {
     try {
         const response = await axios.get('http://localhost:5000/Your_blogs',{withCredentials: true});
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching blogs:', error);
+        throw error;
+    }
+}
+
+export const getBlogById = async (id) =>{
+  try{
+    const response = await axios.get(`http://localhost:5000/blog/${id}`,{withCredentials: true});
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching blog:', error);
         throw error;
     }
 }
