@@ -1,0 +1,35 @@
+/* src/Dashboard.css */
+.Dashboard {
+    display: flex;
+    height: 100vh;
+    background-color: black;
+    color: white;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: black;
+    padding: 20px;
+  }
+  
+  .sidebar-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #ff7f50, #ff6347, #ff4500, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .email {
+    font-size: 18px;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #ff7f50, #ff6347, #ff4500, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  
