@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getYourBlogs } from './blogService';
+// import { getYourBlogs } from './blogService';
 import Blog from './Blog';
-import { CssBaseline, Container, Typography, AppBar, Toolbar, Button} from '@mui/material';
+import { CssBaseline, Container, Typography, AppBar, Toolbar, Button, Grid, Card, CardContent, CardActions } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -17,15 +17,16 @@ const Blogs = () => {
       try {
         const response = await axios.get('http://localhost:5000/Your_blogs',{withCredentials: true});
         console.log(response.data);
-        setBlogs(response.data);
-        // setLoading(false);
+        if(response.data)
+          {setBlogs(response.data);}
+        setLoading(false);
         // return response.data;
     } catch (error) {
         console.error('Error fetching blogs:', error);
         throw error;
     
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     };
 
@@ -35,7 +36,7 @@ const Blogs = () => {
   const handleDelete = async (event, id) => {
     event.preventDefault();
     setError(null);
-    // setLoading(true);
+    setLoading(true);
 
     try {
       await axios.post('http://localhost:5000/delete', { id }, { withCredentials: true });
@@ -43,22 +44,22 @@ const Blogs = () => {
       // Update the state after successful deletion
       setBlogs(prevBlogs => prevBlogs.filter(blog => blog._id !== id));
 
-      // setLoading(false); // Uncomment if you want to stop the loading state after deletion
+      setLoading(false); // Uncomment if you want to stop the loading state after deletion
       // You can add a success message or do other UI updates as needed
 
     } catch (err) {
       setError('Failed to delete blog');
-      // setLoading(false); // Handle error and stop loading state
+      setLoading(false); // Handle error and stop loading state
     }
   };
 
-  // if (loading) {
-  //   return (
-  //     <Container style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-  //       <CircularProgress />
-  //     </Container>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <Container style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
 
   if (error) {
     return (
@@ -79,20 +80,49 @@ const Blogs = () => {
         </Toolbar>
       </AppBar>
       <Container>
-        <Typography variant="h3" align="center" gutterBottom>
+        <Typography variant="h2" align="center" gutterBottom>
           Your Blogs
         </Typography>
-      </Container>
-      <Container style={{ marginTop: '50px' }}>
-        {blogs.map(blog => (
-          <div key={blog._id}>
-            <Blog title={blog.title} content={blog.content} author={blog.username} />
-            <Button variant="contained" color="secondary" onClick={(event) => handleDelete(event, blog._id)}>Delete</Button>
-          </div>
-        ))}
+        <Grid container spacing={4}>
+          {blogs.map((blog) => (
+            <Grid item key={blog._id} xs={12} sm={6} md={6}>
+              <Card style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                <CardContent onClick={() => navigate(`/blog/${blog._id}`)}>
+                  <Typography variant="h5" component="div">
+                    {blog.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}
+                  />
+                </CardContent>
+                <CardActions style={{ justifyContent: 'space-between' }}>
+                  <Button size="small" color="primary" onClick={() => navigate(`/blog/${blog._id}`)}>
+                    Read More
+                  </Button>
+                  <Button
+                    variant="contained"
+                    style={{
+                      backgroundColor: '#2196f3', // Blue color
+                      color: 'white',
+                      borderRadius: '20px', // Curved edges
+                      padding: '4px 12px', // Smaller size
+                      fontSize: '0.75rem', // Smaller font size
+                    }}
+                    onClick={(event) => handleDelete(event, blog._id)}
+                  >
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </>
   );
+  
 };
 
 export default Blogs;
