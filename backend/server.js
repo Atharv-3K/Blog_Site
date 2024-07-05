@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const session = require('express-session'); 
 // const passport = require('passport');
 require('./passport');
+const bcrypt = require('bcrypt');
 
 dotenv.config();
 const { db, User,Blog } = require('./db'); // Adjust path as per your folder structure
@@ -92,48 +93,44 @@ const verifyUser = (req, res, next) => {
   }
 };
 
-app.post('/login',async(req,res)=>{
-  const {username,password}=req.body;
-  try{
-    const user = await User.findOne({ username:username });
-    if(user){
-      if(user.password===password){
-        const token = jwt.sign({id:user._id,email:user.email,username:user.username}, process.env.JWT_SECRET, {
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username: username });
+    if (user) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        const token = jwt.sign({ id: user._id, email: user.email, username: user.username }, process.env.JWT_SECRET, {
           expiresIn: '1h',
         });
-        res.cookie('token', token, { httpOnly: false, secure: false});
-        return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+        res.cookie('token', token, { httpOnly: false, secure: false });
+        return res.status(200).json({ message: 'Login successful', redirectUrl: `${process.env.FRONTEND_URL}/dashboard` });
+      } else {
+        return res.status(401).json({ message: 'Incorrect password' });
       }
-      // res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
-    }else{
+    } else {
       return res.status(404).json({ message: 'User not found', redirectUrl: `${process.env.FRONTEND_URL}/signup` });
     }
-  }catch(e){
-
+  } catch (e) {
+    return res.status(500).json({ message: 'An error occurred' });
   }
-
 });
+
 
 
 // Signup route
 app.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    // Check if username already exists
-    const existingUser = await User.findOne({ email: email});
+    const existingUser = await User.findOne({ email: email });
+
     if (existingUser) {
-      return res.status(400).json('Username already exists');
+      return res.status(400).json('Email already exists');
     }
-    
-    // Create a new user instance
-    const newUser = new User({ username, email, password });
-    console.log(newUser.username);
-    
-    // Save the new user to the database
-    console.log(newUser.password);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
-    console.log(newUser.email);
-    // Respond with success message
     res.status(200).json('User created successfully');
   } catch (error) {
     res.status(500).json('Error: ' + error.message);

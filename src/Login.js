@@ -12,13 +12,13 @@ function Login() {
     axios.post('http://localhost:5000/login', { username, password })
       .then(response => {
         console.log(response.data);
-        alert(response.data); // Show success message
+       // alert(response.data); // Show success message
         navigate('/dashboard'); // Redirect to dashboard after successful login
       })
       .catch(error => {
         console.error(error.response.data);
         alert(error.response.data.message);
-        navigate('/signup'); // Show error message
+       // navigate('/signup'); // Show error message
       });
   };
 
@@ -29,7 +29,7 @@ function Login() {
   return (
     <div className="App">
       <main className="App-main login-container">
-        <h1>Login</h1>
+        <h4>Login</h4>
         <div className="input-box">
           <input
             type="text"

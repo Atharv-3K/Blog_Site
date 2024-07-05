@@ -41,24 +41,24 @@
 
 
 .login-button {
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px 16px;
+  font-size: 14px;
   cursor: pointer;
   background-color: #ff7f50; /* Same color as Blog */
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
-  border-radius: 5px;
-  margin-top: 20px;
+  border-radius: 12px;
+  margin-top: 10px;
 }
 
 .google-button {
-  padding: 15px 30px;
-  font-size: 18px;
+  padding: 12px 24px;
+  font-size: 16px;
   cursor: pointer;
   background-color: #4285F4; /* Google's color */
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 12px;
   margin-top: 20px;
 }
 
@@ -80,7 +80,10 @@
   border-radius: 5px;
   font-size: 16px;
   outline: none;
+  background-color: black; /* Set the background color of the input field */
+  color: white; /* Set the text color to white */
 }
+
 
 .signup-link {
   margin-top: 10px;
